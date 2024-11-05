@@ -1,5 +1,5 @@
 package com.sunbeam.dao;
 
-public class ItemPriceDao {
+public class LoginDao {
 
 }

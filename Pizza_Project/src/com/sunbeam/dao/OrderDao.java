@@ -1,5 +1,5 @@
 package com.sunbeam.dao;
 
-public class CustomerDao {
+public class OrderDao {
 
 }
