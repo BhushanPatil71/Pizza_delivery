@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.sunbeam.entities.Customer;
+import com.sunbeam.tester.application;
 import com.sunbeam.utils.Dbutil;
 
 public class LoginDao implements AutoCloseable {
@@ -17,7 +19,7 @@ public class LoginDao implements AutoCloseable {
 	}
 
 	public void addCustomer(Customer c) throws SQLException {
-		String sql = "INSERT INTO PIZZA_CUSTOMERS (NAME, PASSWORD, MOBILE, ADDRESS, EMAIL)" + " VALUES(?,?,?,?);";
+		String sql = "INSERT INTO PIZZA_CUSTOMERS (NAME, PASSWORD, MOBILE, ADDRESS, EMAIL)" + " VALUES(?,?,?,?,?);";
 		try (PreparedStatement insertStmt = connection.prepareStatement(sql)) {
 			insertStmt.setString(1, c.getName());
 			insertStmt.setString(2, c.getPassword());
@@ -32,7 +34,7 @@ public class LoginDao implements AutoCloseable {
 		}
 	}
 
-	public void signIn(String email, String password) throws SQLException {
+	public void signIn(String email, String password) throws Exception {
 
 		String sql = "SELECT * FROM PIZZA_CUSTOMERS WHERE EMAIL=?";
 		try (PreparedStatement checkStmt = connection.prepareStatement(sql)) {
@@ -42,10 +44,10 @@ public class LoginDao implements AutoCloseable {
 				System.out.println(rs.getString(3) + " " + password);
 				if (rs.getString(3).equals(password)) {
 					System.out.println("login succesfull");
-					if (rs.getString(3) == "Admin") {
-						System.out.println("Show admin menu");
+					if (rs.getString(3).equals("admin")) {
+						application.adminMenu();
 					} else {
-						System.out.println("Show customer menu");
+						application.customerMenu();;
 					}
 					ref = rs.getString(4);
 				} else {
@@ -73,6 +75,12 @@ public class LoginDao implements AutoCloseable {
 			}
 		}
 
+	}
+	
+	public void signOut() throws Exception {
+		Scanner sc=new Scanner(System.in);
+		ref=null;
+		application.topMenu(sc);
 	}
 
 	@Override
